@@ -6,7 +6,7 @@ type View = { x: number; y: number; zoom: number }
 type Geometry = { type: string; coordinates: any }
 type Feature = { type: 'Feature'; id?: string | number; properties?: Record<string, unknown>; geometry: Geometry | null }
 type FeatureCollection = { type: 'FeatureCollection'; features: Feature[] }
-type Props = { view: View; onViewChange: (view: View) => void }
+type Props = { view: View; onViewChange: (view: View) => void; routeFeature?: Feature | null }
 
 const PILOT_BBOX = { west: 74.55, south: 19.30, east: 74.78, north: 19.48 }
 const API_BASE = (import.meta.env.VITE_MAP_API_URL || '').replace(/\/$/, '')
@@ -74,7 +74,7 @@ function paintFeature(ctx: CanvasRenderingContext2D, feature: Feature, project: 
   ctx.restore()
 }
 
-export default function MapCanvas({ view, onViewChange }: Props) {
+export default function MapCanvas({ view, onViewChange, routeFeature = null }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const dragRef = useRef<{ x: number; y: number; viewX: number; viewY: number } | null>(null)
   const [geoData, setGeoData] = useState<FeatureCollection | null>(null)
@@ -147,13 +147,26 @@ export default function MapCanvas({ view, onViewChange }: Props) {
           else { context.strokeStyle = feature.type === 'water' ? '#b8dce8' : '#fff'; context.lineWidth = feature.type === 'water' ? 18 : 5; context.stroke() }
         }
       }
+      if (routeFeature?.geometry?.type === 'LineString') {
+        const routePoints = (routeFeature.geometry.coordinates as number[][]).map(project)
+        context.beginPath()
+        routePoints.forEach(([x, y], i) => i ? context.lineTo(x, y) : context.moveTo(x, y))
+        context.strokeStyle = '#ffffff'
+        context.lineWidth = 9
+        context.lineCap = 'round'
+        context.lineJoin = 'round'
+        context.stroke()
+        context.strokeStyle = '#277f62'
+        context.lineWidth = 5
+        context.stroke()
+      }
       context.restore()
     }
     draw()
     const observer = new ResizeObserver(draw)
     observer.observe(canvas)
     return () => observer.disconnect()
-  }, [view, geoData, geographicFeatures])
+  }, [view, geoData, geographicFeatures, routeFeature])
 
   const onWheel = (event: WheelEvent<HTMLCanvasElement>) => {
     event.preventDefault()
