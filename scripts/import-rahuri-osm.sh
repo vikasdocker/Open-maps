@@ -15,6 +15,6 @@ fi
 
 osm2pgsql --create --slim --database "$DB_NAME" --username "$DB_USER" \
   --host "$DB_HOST" --port "$DB_PORT" --output=pgsql \
-  --hstore --latlon "$INPUT"
+  --hstore "$INPUT"
 
 echo "Import complete. Verify with: SELECT count(*) FROM planet_osm_line;"
