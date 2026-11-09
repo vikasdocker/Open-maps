@@ -6,14 +6,13 @@ type View = { x: number; y: number; zoom: number }
 
 export default function App() {
   const [view, setView] = useState<View>({ x: 0, y: 0, zoom: 1 })
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null)
   const [status, setStatus] = useState('Demo canvas · no geographic data loaded')
 
   const locate = () => {
     if (!navigator.geolocation) { setStatus('Geolocation is not supported by this browser'); return }
     setStatus('Requesting your location…')
     navigator.geolocation.getCurrentPosition(
-      () => { setUserLocation([0, 0]); setStatus('Location permission received · waiting for geographic projection') },
+      ({ coords }) => setStatus(`GPS: ${coords.latitude.toFixed(5)}, ${coords.longitude.toFixed(5)} · geographic map projection not connected yet`),
       (error) => setStatus(error.message),
       { enableHighAccuracy: true, timeout: 10000 },
     )
@@ -37,7 +36,7 @@ export default function App() {
       </header>
 
       <section className="map-stage">
-        <MapCanvas view={view} onViewChange={setView} userLocation={userLocation} />
+        <MapCanvas view={view} onViewChange={setView} />
         <div className="map-title">
           <span className="eyebrow">YOUR MAP PLATFORM</span>
           <h1>A new view of the world.</h1>
@@ -48,7 +47,7 @@ export default function App() {
           <button aria-label="Zoom out" title="Zoom out" onClick={() => setView(v => ({ ...v, zoom: Math.max(.45, v.zoom / 1.2) }))}><Minus size={19} /></button>
           <span className="control-divider" />
           <button aria-label="My location" title="My location" onClick={locate}><LocateFixed size={19} /></button>
-          <button aria-label="Reset map" title="Reset map" onClick={() => { setView({ x: 0, y: 0, zoom: 1 }); setUserLocation(null) }}><Crosshair size={18} /></button>
+          <button aria-label="Reset map" title="Reset map" onClick={() => { setView({ x: 0, y: 0, zoom: 1 }); setStatus('Demo canvas · no geographic data loaded') }}><Crosshair size={18} /></button>
         </div>
         <div className="map-attribution"><MapPin size={12} /> {status}</div>
         <div className="map-badge">CUSTOM RENDERER <span>•</span> DEMO DATA</div>
