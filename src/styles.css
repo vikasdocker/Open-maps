@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+
+:root{font-family:'DM Sans',sans-serif;color:#1d2925;background:#f7f8fa;font-synthesis:none;text-rendering:optimizeLegibility}
+*{box-sizing:border-box}
+body{margin:0;min-width:320px;min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+.app-shell{height:100vh;min-height:560px;display:flex;flex-direction:column;padding:0 28px 16px}
+.topbar{height:76px;display:flex;align-items:center;gap:22px;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:#1c2c27;font:800 21px 'Manrope',sans-serif;letter-spacing:-1px;white-space:nowrap}
+.brand-mark{width:34px;height:34px;border-radius:11px;background:#244e42;color:#fff;display:grid;place-items:center}
+.brand-light{font-weight:500;color:#688078}
+.version{font:700 9px 'DM Sans',sans-serif;letter-spacing:1px;color:#789087;background:#e9efeb;padding:5px 7px;border-radius:5px;margin-left:4px}
+.search-wrap{height:42px;width:min(470px,48vw);margin:0 auto;display:flex;align-items:center;gap:10px;padding:0 13px;background:#fff;border:1px solid #e8ece9;border-radius:11px;color:#7b8b84;box-shadow:0 2px 8px #1b33200a}
+.search-wrap input{border:0;outline:0;background:transparent;flex:1;min-width:0;color:#53645d;font-size:13px}
+.search-wrap input::placeholder{color:#a0aaa5}
+.search-wrap kbd{font:11px 'DM Sans',sans-serif;color:#99a39e;border:1px solid #e8ece9;border-radius:5px;padding:3px 5px}
+.icon-button,.profile-button{height:40px;border:1px solid #e5eae7;background:#fff;color:#53645d;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 12px}
+.profile-button{font-size:12px;font-weight:600}
+.map-stage{position:relative;flex:1;min-height:0;overflow:hidden;border:1px solid #e1e8e2;border-radius:18px;background:#f2f5ef;box-shadow:0 12px 35px #243b2d0c}
+.map-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+.map-canvas:active{cursor:grabbing}
+.map-title{position:absolute;top:30px;left:32px;pointer-events:none}
+.eyebrow{font-size:9px;font-weight:700;letter-spacing:1.7px;color:#71877d}
+.map-title h1{font:700 clamp(22px,3vw,34px) 'Manrope',sans-serif;letter-spacing:-1.3px;margin:8px 0 5px;color:#273d34}
+.map-title p{font-size:12px;color:#75857c;margin:0}
+.map-controls{position:absolute;right:20px;bottom:24px;display:flex;flex-direction:column;padding:5px;background:#fff;border:1px solid #e5ebe6;border-radius:12px;box-shadow:0 5px 20px #243b2d12}
+.map-controls button{width:38px;height:38px;border:0;background:transparent;color:#53685e;border-radius:8px;display:grid;place-items:center}
+.map-controls button:hover{background:#eff4f0}
+.control-divider{height:1px;background:#edf0ed;margin:3px 5px}
+.map-attribution{position:absolute;left:17px;bottom:14px;display:flex;align-items:center;gap:6px;font-size:10px;color:#78877f;background:#ffffffd9;border:1px solid #e8ede8;border-radius:7px;padding:7px 9px;max-width:calc(100% - 110px)}
+.map-badge{position:absolute;right:18px;top:18px;font-size:9px;font-weight:700;letter-spacing:1px;color:#668074;background:#ffffffd9;border:1px solid #e8ede8;border-radius:7px;padding:8px 10px}
+.map-badge span{padding:0 4px;color:#d19a55}
+.footer{height:34px;flex-shrink:0;display:flex;align-items:end;justify-content:space-between;color:#8b9891;font-size:9px;letter-spacing:.3px}
+.footer>span:first-child{font-weight:700;letter-spacing:1px}
+.footer-dot{padding:0 5px;color:#c0c9c3}
+@media(max-width:680px){.app-shell{padding:0 10px 10px}.topbar{height:64px;gap:10px}.brand{font-size:18px}.version,.desktop-only,.search-wrap kbd{display:none}.search-wrap{width:auto;flex:1;margin-left:auto;padding:0 9px}.profile-button{padding:0 9px}.profile-button span{display:none}.map-stage{border-radius:13px}.map-title{top:20px;left:18px}.map-title h1{font-size:23px}.map-title p{max-width:220px;font-size:11px;line-height:1.5}.map-controls{right:12px;bottom:14px}.footer{font-size:8px}.footer>span:last-child{max-width:58%;text-align:right;line-height:1.4}}
