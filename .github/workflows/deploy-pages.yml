@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - foundation/map-web-v1
   workflow_dispatch:
 
 permissions:
