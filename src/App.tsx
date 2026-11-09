@@ -6,7 +6,7 @@ type View = { x: number; y: number; zoom: number }
 
 export default function App() {
   const [view, setView] = useState<View>({ x: 0, y: 0, zoom: 1 })
-  const [status, setStatus] = useState('Demo canvas · no geographic data loaded')
+  const [status, setStatus] = useState('Pilot map · connect the Open Maps API to load real OSM data')
 
   const locate = () => {
     if (!navigator.geolocation) { setStatus('Geolocation is not supported by this browser'); return }
@@ -47,14 +47,14 @@ export default function App() {
           <button aria-label="Zoom out" title="Zoom out" onClick={() => setView(v => ({ ...v, zoom: Math.max(.45, v.zoom / 1.2) }))}><Minus size={19} /></button>
           <span className="control-divider" />
           <button aria-label="My location" title="My location" onClick={locate}><LocateFixed size={19} /></button>
-          <button aria-label="Reset map" title="Reset map" onClick={() => { setView({ x: 0, y: 0, zoom: 1 }); setStatus('Demo canvas · no geographic data loaded') }}><Crosshair size={18} /></button>
+          <button aria-label="Reset map" title="Reset map" onClick={() => { setView({ x: 0, y: 0, zoom: 1 }); setStatus('Pilot map · connect the Open Maps API to load real OSM data') }}><Crosshair size={18} /></button>
         </div>
         <div className="map-attribution"><MapPin size={12} /> {status}</div>
-        <div className="map-badge">CUSTOM RENDERER <span>•</span> DEMO DATA</div>
+        <div className="map-badge">CUSTOM RENDERER <span>•</span> RAHURI PILOT</div>
       </section>
       <footer className="footer">
         <span>OPEN MAPS <span className="footer-dot">/</span> FOUNDATION 0.1</span>
-        <span>Map engine: Canvas 2D · Geographic data pipeline: not connected yet</span>
+        <span>Map engine: custom Canvas 2D · Data: GeoJSON API</span>
       </footer>
     </main>
   )
