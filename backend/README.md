@@ -1,32 +1,28 @@
-# Open Maps API (development foundation)
+# Open Maps API
+FastAPI reads our own PostGIS database and returns GeoJSON for map features, place search and a first custom shortest-path routing prototype.
 
-The API reads from our own PostGIS database and returns RFC 7946 GeoJSON. It does not proxy map tiles and does not use a third-party renderer.
-
-## Start services
-
+## Run locally
 ```bash
 cp .env.example .env
 docker compose up -d --build
 ```
+Health check: http://localhost:8000/health
 
-API health: http://localhost:8000/health
-
-## Import OSM data
-
-Install osm2pgsql on the host, download a small clipped OSM PBF for the pilot area documented in `docs/data/rahuri-pilot.md`, then import it:
-
+## Download and import Rahuri data
+Install `osm2pgsql` and `curl`, then run from repository root:
 ```bash
-osm2pgsql --create --slim --database openmaps --username openmaps --host localhost --port 5432 --password --output=pgsql --style /usr/share/osm2pgsql/default.style rahuri-pilot.osm.pbf
+bash scripts/download-rahuri-osm.sh
+export PGPASSWORD='your-postgis-password'
+bash scripts/import-rahuri-osm.sh
 ```
+The pilot bbox is 19.30,74.55,19.48,74.78 (south,west,north,east in Overpass). This extract is deliberately small. Retain download date and checksum. Do not commit OSM data or database volumes.
 
-Use the database password configured in `.env`. The command above prompts for it. The default osm2pgsql schema is expected by the first API implementation. Verify that the imported tables contain data before testing the API.
+## Endpoints
+- `GET /health`
+- `GET /api/v1/features?bbox=74.55,19.30,74.78,19.48&layers=roads,water,buildings,places,landuse`
+- `GET /api/v1/search?q=Rahuri`
+- `GET /api/v1/route?start=74.65,19.39&end=74.68,19.41&profile=driving`
 
-Example:
-```bash
-curl 'http://localhost:8000/api/v1/features?bbox=74.55,19.30,74.78,19.48&layers=roads,water,buildings,places,landuse'
-```
+Routing builds a graph from road geometries in the corridor and finds a shortest path. It is a prototype: one-way/turn restrictions, access rules, speed-based ETA, route snapping and precomputed large-area graphs need further implementation and validation before real-world navigation use.
 
-For a real deployment, use a dedicated database role with read-only API permissions, TLS, rate limits, request logging, bounded viewport queries, backups, and a non-default secret. Never expose PostGIS port 5432 publicly.
-
-## Important
-This is the first ingestion/API foundation, not yet a complete production service. The pilot extract must be downloaded and imported before the API can return real features. Keep large PBF extracts and database volumes out of Git.
+For production, use a read-only DB role for API, TLS, secrets, rate limits, backups and monitoring. Do not expose PostGIS port 5432 publicly.
