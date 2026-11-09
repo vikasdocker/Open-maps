@@ -3,7 +3,7 @@ import { Compass, Crosshair, Layers, LocateFixed, MapPin, Minus, Plus, Search, S
 import MapCanvas from './map/MapCanvas'
 
 type View = { x: number; y: number; zoom: number }
-type SearchResult = { id: string; name: string; type: string; lat: number; lon: number }
+type SearchResult = { id: string; name: string; type: string; lat: number; lon: number }\ntype RouteFeature = { type: 'Feature'; geometry: { type: string; coordinates: number[][] }; properties: { distance_m?: number; profile?: string } }
 const API_BASE = (import.meta.env.VITE_MAP_API_URL || '').replace(/\/$/, '')
 
 export default function App() {
@@ -14,7 +14,7 @@ export default function App() {
   const [searchText, setSearchText] = useState('')
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [searching, setSearching] = useState(false)
-  const [searchError, setSearchError] = useState('')
+  const [searchError, setSearchError] = useState('')\n  const [destination, setDestination] = useState<SearchResult | null>(null)\n  const [routeFeature, setRouteFeature] = useState<RouteFeature | null>(null)\n  const [routing, setRouting] = useState(false)
 
   useEffect(() => {
     if (!gpsEnabled) return
@@ -74,13 +74,13 @@ export default function App() {
       </header>
 
       <section className="map-stage">
-        <MapCanvas view={view} onViewChange={setView} />
+        <MapCanvas view={view} onViewChange={setView} routeFeature={routeFeature} />
         <div className="map-title">
           <span className="eyebrow">YOUR MAP PLATFORM</span>
           <h1>A new view of the world.</h1>
           <p>Independent mapping infrastructure, built from the ground up.</p>
         </div>
-        <div className="map-controls">
+        {destination && <button className="route-button" onClick={calculateRoute} disabled={routing}>{routing ? 'Calculating…' : 'Route from my location'}</button>}\n        <div className="map-controls">
           <button aria-label="Zoom in" title="Zoom in" onClick={() => setView(v => ({ ...v, zoom: Math.min(12, v.zoom * 1.2) }))}><Plus size={19} /></button>
           <button aria-label="Zoom out" title="Zoom out" onClick={() => setView(v => ({ ...v, zoom: Math.max(.45, v.zoom / 1.2) }))}><Minus size={19} /></button>
           <span className="control-divider" />
