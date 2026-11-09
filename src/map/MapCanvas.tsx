@@ -129,7 +129,7 @@ export default function MapCanvas({ view, onViewChange, routeFeature = null }: P
       for (let x = ((centerX % grid) + grid) % grid; x < rect.width; x += grid) { context.beginPath(); context.moveTo(x, 0); context.lineTo(x, rect.height); context.stroke() }
       for (let y = ((centerY % grid) + grid) % grid; y < rect.height; y += grid) { context.beginPath(); context.moveTo(0, y); context.lineTo(rect.width, y); context.stroke() }
 
-      if (geoData?.features.length) {
+      if (geoData) {
         const order = ['water', 'landuse', 'park', 'building', 'road', 'highway', 'place', 'poi']
         const sorted = [...geographicFeatures].sort((a, b) => order.indexOf(String(a.properties?.class)) - order.indexOf(String(b.properties?.class)))
         sorted.forEach(feature => paintFeature(context, feature, project, view.zoom))
