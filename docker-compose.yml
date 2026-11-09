@@ -1,0 +1,34 @@
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    container_name: openmaps-postgis
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: openmaps
+      POSTGRES_USER: openmaps
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-openmaps_dev}
+    ports:
+      - "5432:5432"
+    volumes:
+      - openmaps-postgis:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openmaps -d openmaps"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    container_name: openmaps-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://openmaps:${POSTGRES_PASSWORD:-openmaps_dev}@postgis:5432/openmaps
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgis:
+        condition: service_healthy
+
+volumes:
+  openmaps-postgis:
